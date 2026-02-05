@@ -1,0 +1,33 @@
+# Core dependencies for KiCad Automation Skill
+
+# KiCad Python bindings (usually included with KiCad installation)
+# pcbnew  # KiCad PCB module (bundled with KiCad)
+# eeschema  # KiCad Schematic module (bundled with KiCad)
+
+# Natural language processing
+openai>=1.0.0  # For advanced NLP capabilities
+
+# Data processing
+pandas>=1.5.0
+numpy>=1.21.0
+
+# Configuration management
+pyyaml>=6.0
+
+# CLI interface
+click>=8.0.0
+rich>=13.0.0  # For beautiful terminal output
+
+# File operations
+python-magic-bin>=0.4.14  # For file type detection
+
+# Optional: For advanced parsing
+lark>=1.1.0  # Grammar-based parsing
+
+# Optional: For KiCad CLI automation
+# ki-cad>=7.0.0  # Install separately if needed
+
+# Development dependencies (for contributors)
+pytest>=7.0.0
+black>=22.0.0
+mypy>=0.950
