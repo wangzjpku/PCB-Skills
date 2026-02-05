@@ -1,0 +1,41 @@
+[MASTER]
+# Set expected Python version
+py-version = 3.8
+
+# Use multiple processes
+jobs = 1
+
+# Disable specific checks (customize as needed)
+disable=
+    C0111,  # Wrong-import-order (use isort instead)
+    C0103,  # Missing-docstring-class (use docstrings)
+    C0302,  # No __init__ method (allowed for simple classes)
+    R0901,  # Too-few-public-methods (class can be simple)
+
+# Configure checks
+[FORMAT]
+# Use 4 spaces for indentation
+indent-string='    '
+
+# Maximum line length
+max-line-length = 100
+
+# Good variable names (customize as needed)
+good-names=i,j,k,ex,Run,_,temp,a,b,c,d,e,f,m,n,o,r,s,t,v,w,y,z
+
+# Suggest method names if not snake_case (disabled)
+function-rgx=[a-z_][a-z0-9_]{2,}(?!_]$
+
+[BASIC]
+# Good variable names
+good-names=i,j,k,ex,Run,_,temp,a,b,c,d,e,f,m,n,o,t,s,v,w
+
+# Always check for __init__ (disabled for dataclasses)
+include-naming-hint=no
+
+[DESIGN]
+max-args = 7
+max-locals = 15
+max-returns = 5
+max-branches = 12
+max-statements = 50

@@ -1,0 +1,17 @@
+pytest>=7.0.0
+pytest-cov>=4.0.0
+pytest-xdist>=3.0.0
+
+# Development dependencies
+black>=22.0.0
+mypy>=0.950
+pylint>=2.15.0
+isort>=5.10.0
+bandit>=1.7.0
+
+# KiCad integration (optional for testing)
+# pcbnew>=7.0.0  # Only available in KiCad environment
+
+# AI integration (optional for testing)
+# openai>=1.0.0  # Test with mock
+# pandas>=1.5.0  # For data processing tests
