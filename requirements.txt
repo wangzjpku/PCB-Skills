@@ -1,33 +1,20 @@
-# Core dependencies for KiCad Automation Skill
+# Python dependencies for KiCad NLP Auto-Design Skill
 
-# KiCad Python bindings (usually included with KiCad installation)
-# pcbnew  # KiCad PCB module (bundled with KiCad)
-# eeschema  # KiCad Schematic module (bundled with KiCad)
-
-# Natural language processing
-openai>=1.0.0  # For advanced NLP capabilities
+# Core dependencies (no external KiCad API required)
+# This skill uses native S-expression format generation
+# No KiCad installation needed for file generation
 
 # Data processing
-pandas>=1.5.0
-numpy>=1.21.0
+dataclasses>=0.6  # Python 3.7+ has built-in, but explicit for type hints
+typing-extensions>=4.0.0  # Extended typing support
 
-# Configuration management
-pyyaml>=6.0
+# Optional dependencies for enhanced features
+# Uncomment if needed:
+# openai>=1.0.0  # For AI-powered natural language understanding
+# pandas>=1.3.0  # For BOM generation and data export
 
-# CLI interface
-click>=8.0.0
-rich>=13.0.0  # For beautiful terminal output
-
-# File operations
-python-magic-bin>=0.4.14  # For file type detection
-
-# Optional: For advanced parsing
-lark>=1.1.0  # Grammar-based parsing
-
-# Optional: For KiCad CLI automation
-# ki-cad>=7.0.0  # Install separately if needed
-
-# Development dependencies (for contributors)
-pytest>=7.0.0
-black>=22.0.0
-mypy>=0.950
+# Development dependencies (for testing)
+pytest>=7.0.0  # Testing framework
+black>=22.0.0  # Code formatter
+mypy>=0.900  # Type checker
+pylint>=2.15.0  # Code linter

@@ -1,171 +1,224 @@
 ---
-name: kicad-automation
-description: Natural language interface for KiCad PCB and schematic design automation
+name: kicad-nlp-auto-design
+description: Natural language to KiCad PCB/SCH generator with GUI compatibility
 version: 1.0.0
 author: wangzjpku
 tags:
   - kicad
   - pcb-design
   - schematic-design
+  - natural-language
   - automation
-  - python-scripting
   - eda
+  - python
 license: GPL-3.0-or-later
 
-# KiCad Automation Skill
+# KiCad NLP Auto-Design Skill
 
-A comprehensive skill that enables natural language control of KiCad EDA (Electronic Design Automation) for PCB and schematic design.
+A complete skill that converts natural language hardware descriptions into KiCad PCB and schematic files. Generated files (.kicad_pcb and .kicad_sch) can be directly opened and edited in KiCad GUI.
 
-## Capabilities
+## Features
 
-### PCB Design Automation
-- Create new PCB boards with custom dimensions
-- Add/place footprints and components
-- Create and route tracks
-- Define and manage layers
-- Add zones (copper pours)
-- Export Gerber files
-- Export 3D models (STEP)
-- Run Design Rule Checks (DRC)
-- Generate BOM (Bill of Materials)
+### Natural Language Processing
+- **Chip Recognition**: Auto-detect MCU chips (ESP32, STM32, Arduino, AVR, PIC)
+- **Component Extraction**: Identify LEDs, resistors, capacitors, buttons, sensors from text
+- **Power Analysis**: Parse voltage requirements and regulator specifications
+- **Interface Detection**: Identify UART, I2C, SPI, GPIO, PWM, USB communication
+- **Control Logic**: Extract control schemes (GPIO toggle, PWM dimming, UART control)
 
-### Schematic Design Automation
-- Create new schematic sheets
-- Add schematic symbols
-- Wire components together
-- Add labels and annotations
-- Generate netlists
-- Export to various formats
-- Run Electrical Rule Checks (ERC)
+### File Generation
+- **Schematic Files**: Generate .kicad_sch files with symbols, wires, labels
+- **PCB Files**: Generate .kicad_pcb files with footprints, tracks, vias, board outline
+- **KiCad Standard**: Uses S-expression format compatible with KiCad 7.x/8.x/9.x
+- **GUI Compatible**: Generated files open directly in KiCad GUI without conversion
 
-### Integration Capabilities
-- File-based automation (read/write .kicad_pcb, .kicad_sch)
-- Python scripting via KiCad's SWIG bindings
-- CLI automation via kicad-cli
-- Plugin system integration
-- Natural language processing for design intent
+### Core Capabilities
 
-## Usage
+#### PCB Generation
+- Multi-layer board support (2-12 layers)
+- Automatic board outline creation
+- Component footprint placement with position and rotation
+- Track routing with customizable width and layers
+- Via creation for multi-layer connections
+- Copper zone (fill) support
+- Design rule integration
 
-### Installation
+#### Schematic Generation
+- Symbol library with standard components (VCC, GND, resistors, capacitors)
+- Wire connections between component pins
+- Label system (local, global, hierarchical)
+- Power symbol integration
+- Net management
 
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/wangzjpku/PCB-Skills.git
-   cd PCB-Skills
-   ```
+#### Design Validation
+- DRC (Design Rule Check) integration
+- ERC (Electrical Rule Check) support
+- BOM (Bill of Materials) generation
+- Gerber export for fabrication
+- STEP model export for 3D viewing
 
+## Installation
+
+### Prerequisites
+- Python 3.8 or higher
+- KiCad 7.0 or later recommended (for GUI editing)
+- No KiCad API dependencies required (uses native S-expression format)
+
+### Installation Steps
+
+1. Clone or download this skill
 2. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
 
-3. For KiCad plugin mode:
-   - Copy `scripts/kicad_plugin/` to your KiCad scripting plugins directory
-   - Windows: `C:\Users\<username>\Documents\KiCad\<version>\scripting\plugins\`
-   - Linux: `~/.local/share/kicad/<version>/scripting/plugins/`
-   - macOS: `~/Library/Preferences/kicad/scripting/plugins/`
+3. Verify installation:
+   ```bash
+   python -c "from scripts.core_designer import design_from_natural_language; print('OK')"
+   ```
 
-### Basic Usage
+## Usage
 
-#### Natural Language Interface
-
-```python
-from scripts.core import KiCadAssistant
-
-assistant = KiCadAssistant()
-
-# Create a new PCB
-assistant.create_pcb(width="100mm", height="100mm", name="my_design")
-
-# Add components via natural language
-assistant.add_component(ref="U1", footprint="SOIC-8", value="ATmega328P")
-assistant.add_component(ref="C1", footprint="C0805", value="100nF")
-
-# Route connections
-assistant.route_tracks("Connect U1 pin 1 to C1 pin 1", width="0.5mm")
-
-# Export files
-assistant.export_gerber(output_dir="./gerber")
-assistant.export_step("./model.step")
-
-# Run DRC
-assistant.run_drc()
-```
-
-#### Standalone Scripting
+### Command Line
 
 ```bash
-# Using Python scripts directly
-python scripts/pcb_designer.py --config design.json --output board.kicad_pcb
+# Generate from natural language description
+python scripts/core_designer.py "设计一个ESP32开发板，包含USB和LED" -o ./output
 
-# Using CLI (if available)
-kicad-cli pcb export gerber board.kicad_pcb --output gerber/
+# Run examples
+python examples/led_circuit.py
+python examples/esp32_board.py
 ```
 
-#### Plugin Mode
+### Python API
 
-Load the plugin in KiCad:
-1. Open KiCad
-2. Go to Tools → External Plugins
-3. Select "KiCad Automation Assistant"
-4. Use the integrated interface for natural language commands
+```python
+from scripts.core_designer import design_from_natural_language
 
-## API Reference
+# Generate design
+result = design_from_natural_language(
+    description="设计一个简单的LED电路，5V供电",
+    output_dir="./output"
+)
 
-### Core Classes
+if result['success']:
+    print(f"SCH: {result['sch_file']}")
+    print(f"PCB: {result['pcb_file']}")
+```
 
-- `KiCadAssistant`: Main interface for natural language automation
-- `PCBDesigner`: PCB-specific design operations
-- `SchematicDesigner`: Schematic-specific design operations
-- `FileManager`: File I/O operations
-- `DesignValidator`: DRC/ERC validation
+### Natural Language Examples
 
-### Supported File Formats
+**Chinese Examples:**
+- "设计一个ESP32开发板，包含WiFi和蓝牙功能"
+- "创建STM32F103最小系统板"
+- "做一个Arduino UNO兼容的板子"
+- "生成4层PCB，尺寸100x80mm"
+- "LED闪烁电路，GPIO2控制"
 
-- `.kicad_pcb` - PCB design files
-- `.kicad_sch` - Schematic design files
-- `.kicad_pro` - Project files
-- `.gerber` - Gerber fabrication files
-- `.step` - 3D model files
-- `.csv` - BOM files
+**English Examples:**
+- "Design an ESP32 development board with WiFi and Bluetooth"
+- "Create STM32F103 minimum system board"
+- "Make an Arduino UNO compatible board"
+- "Generate 4-layer PCB, size 100x80mm"
+- "LED blink circuit controlled by GPIO2"
+
+## Output Files
+
+Generated files can be directly opened in KiCad:
+
+- `.kicad_sch` - Schematic file (symbol view, wiring)
+- `.kicad_pcb` - PCB file (footprints, tracks, layout)
+- `design_report.txt` - Design summary and component list
+
+## Architecture
+
+```
+┌─────────────────────────────────────────────┐
+│      Natural Language Input               │
+│  "设计ESP32开发板..."                   │
+└───────────────┬───────────────────────────┘
+                ↓
+┌─────────────────────────────────────────────┐
+│         NLP Parser                      │
+│  - Chip detection                      │
+│  - Component extraction                 │
+│  - Power analysis                      │
+└───────────────┬───────────────────────────┘
+                ↓
+┌─────────────────────────────────────────────┐
+│       Design Generator                   │
+│  - SCH Generator                     │
+│  - PCB Generator                     │
+└───────────────┬───────────────────────────┘
+                ↓
+┌─────────────────────────────────────────────┐
+│      File Output                        │
+│  - schematic.kicad_sch              │
+│  - board.kicad_pcb                  │
+│  - report.txt                       │
+└─────────────────────────────────────────────┘
+```
+
+## Components
+
+### Modules
+
+- **scripts/core_designer.py**: Main design orchestrator
+- **scripts/generators/sch_generator.py**: Schematic file generator
+- **scripts/generators/pcb_generator.py**: PCB file generator
+- **scripts/nlp/parser.py**: Natural language parser
+- **examples/****: Usage examples
+
+### Data Structures
+
+- `HardwareSpec`: Parsed hardware specifications
+- `SCHSymbol`: Schematic component symbol
+- `PCBComponent`: PCB footprint component
+- `SCHWire`: Schematic wire connection
+- `PCBTrack`: PCB routing track
 
 ## Examples
 
-See `examples/` directory for:
-- Simple LED circuit design
-- MCU board with multiple components
-- Multi-layer PCB design
-- Schematic to PCB workflow
+See `examples/` directory for complete working examples:
+- `led_circuit.py` - Simple LED circuit
+- `esp32_board.py` - ESP32 development board
 
 ## Documentation
 
-- `docs/api.md` - Complete API reference
-- `docs/tutorials.md` - Step-by-step tutorials
-- `docs/troubleshooting.md` - Common issues and solutions
+- **API Reference**: Complete API documentation for all classes
+- **Tutorials**: Step-by-step guides
+- **Troubleshooting**: Common issues and solutions
+
+## Limitations
+
+- Requires manual review for complex designs
+- Auto-routing is basic (straight line connections)
+- Component library is limited to standard parts
+- High-speed signal design requires manual optimization
+
+## Future Enhancements
+
+- Enhanced natural language understanding with AI
+- Intelligent auto-routing algorithms
+- Component library expansion (thousands of parts)
+- Signal integrity analysis
+- 3D model integration
 
 ## License
 
-This skill is licensed under GPL-3.0-or-later, compatible with KiCad's license.
+GPL-3.0-or-later (compatible with KiCad license)
 
 ## Contributing
 
-Contributions welcome! Please submit issues and pull requests to improve:
-- Natural language parsing
-- Design automation workflows
-- Additional KiCad features
-- Documentation and examples
-
-## Requirements
-
-- Python 3.8+
-- KiCad 7.0 or later (with Python scripting support)
-- Optional: kicad-cli for some operations
+Contributions welcome! Areas for improvement:
+- Natural language parsing accuracy
+- Additional KiCad features support
+- More component libraries
+- Documentation improvements
+- Test cases and examples
 
 ## Acknowledgments
 
-Built on top of KiCad's Python scripting API (SWIG bindings).
-Inspired by existing KiCad automation tools:
-- kicad-jlcpcb-tools
-- kicad-kbplacer
-- JLC2KiCad_lib
+Based on KiCad's S-expression file format.
+Inspired by KiCad automation tools and community projects.
+Compatible with KiCad 7.x/8.x/9.x GUI versions.
