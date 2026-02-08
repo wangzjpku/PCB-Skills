@@ -524,6 +524,69 @@ def create_to92() -> Footprint:
     )
 
 
+def create_dip4() -> Footprint:
+    """DIP-4 双列直插封装（用于光耦PC817等）"""
+    pads = [
+        # 左侧引脚 1, 2
+        Pad(
+            number="1",
+            x=-3.81,
+            y=2.54,
+            size_x=1.5,
+            size_y=1.5,
+            shape="rect",
+            drill=0.8,
+        ),
+        Pad(
+            number="2",
+            x=-3.81,
+            y=-2.54,
+            size_x=1.5,
+            size_y=1.5,
+            shape="circle",
+            drill=0.8,
+        ),
+        # 右侧引脚 3, 4（注意顺序是反向的）
+        Pad(
+            number="3",
+            x=3.81,
+            y=-2.54,
+            size_x=1.5,
+            size_y=1.5,
+            shape="circle",
+            drill=0.8,
+        ),
+        Pad(
+            number="4",
+            x=3.81,
+            y=2.54,
+            size_x=1.5,
+            size_y=1.5,
+            shape="circle",
+            drill=0.8,
+        ),
+    ]
+
+    return Footprint(
+        name="DIP-4_W7.62mm",
+        description="DIP-4, 7.62mm width (Optocoupler PC817, etc.)",
+        pads=pads,
+        silkscreen=[
+            {"type": "rect", "start": (-5.0, -4.0), "end": (5.0, 4.0)},
+            {
+                "type": "arc",
+                "center": (-5.0, 4.0),
+                "radius": 0.8,
+                "start": 0,
+                "end": 180,
+            },  # Pin 1标记
+        ],
+        fab_layer=[
+            {"type": "rect", "start": (-4.8, -3.8), "end": (4.8, 3.8)},
+        ],
+    )
+
+
 # ==================== 连接器封装 ====================
 
 

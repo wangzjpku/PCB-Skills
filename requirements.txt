@@ -8,6 +8,13 @@
 dataclasses>=0.6  # Python 3.7+ has built-in, but explicit for type hints
 typing-extensions>=4.0.0  # Extended typing support
 
+# Vision & Screenshot dependencies (for auto_analyzer)
+pillow>=9.0.0  # Image processing and screenshot
+mss>=7.0.0  # High-performance screenshot
+pyautogui>=0.9.50  # GUI automation and screenshot
+psutil>=5.9.0  # Process management
+pywin32>=227; sys_platform == "win32"  # Windows API access
+
 # Optional dependencies for enhanced features
 # Uncomment if needed:
 # openai>=1.0.0  # For AI-powered natural language understanding
